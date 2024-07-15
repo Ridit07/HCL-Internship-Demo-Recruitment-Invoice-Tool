@@ -1,0 +1,112 @@
+create database rct;
+use  rct;
+
+-- Create Vendor Table
+CREATE TABLE Vendor (
+  VendorID INT PRIMARY KEY,
+  VendorName VARCHAR(100),
+  VendorEmailID VARCHAR(100),
+  VendorPhoneNo VARCHAR(20),
+  VendorPass VARCHAR(30)
+);
+	
+
+
+CREATE TABLE RegionMaster (
+  Person_RegionId INT PRIMARY KEY,
+  RegionName VARCHAR(100)
+);
+
+-- Create EmployeeMaster Table
+CREATE TABLE EmployeeMaster (
+  PersonID INT PRIMARY KEY,
+  PersonName VARCHAR(100),
+  VendorID INT,
+  Person_RegionId int,
+  PersonSkill VARCHAR(100),
+  Experience INT,
+  PersonEmailID VARCHAR(100),
+  PersonDateOfHiring DATE,
+  PersonStatus bool,
+  ContractDuration float,
+  PersonPass VARCHAR(30),
+  PersonDeptID INT,
+  ExceptionalHiring bool,
+  ExceptionReason VARCHAR(100),
+  FOREIGN KEY (VendorID) REFERENCES Vendor(VendorID),
+  FOREIGN KEY (Person_RegionId) REFERENCES RegionMaster(Person_RegionId)
+  
+);
+
+
+
+
+
+-- Create Claim Table
+CREATE TABLE Claim (
+  ClaimID INT PRIMARY KEY,
+  PersonID INT,
+  VendorID INT,
+  ClaimStatus int,
+ -- Amount DECIMAL(10, 2),
+ -- ExceptionalHiring bool,
+ -- ExceptionReason VARCHAR(100),
+  generationdate Date,
+  PersonSkill varchar(50),
+  PersonXp int,
+  Refraldoc Varchar(50),
+  manager varchar(50),
+--  manages_empID int,
+  PersonDateOfHiring date,
+  FOREIGN KEY (PersonID) REFERENCES EmployeeMaster(PersonID),
+  FOREIGN KEY (VendorID) REFERENCES Vendor(VendorID)
+);
+
+
+-- Create Status Table
+CREATE TABLE Status (
+  ClaimID INT,
+  Status int,
+--   EarlierStatus int,
+  DateOfChange DATE,
+  ChangedBy_emp_id int,
+  TimesRejected INT,
+  manager varchar(10),
+  FOREIGN KEY (ClaimID) REFERENCES Claim(ClaimID)
+);
+
+
+
+
+
+-- Create RateCard Table
+CREATE TABLE RateCard (
+  RateCardID INT PRIMARY KEY,
+--   PersonID INT,
+--   VendorID INT,
+--   Region VARCHAR(50),
+--   Experience INT,
+  ClaimID INT,
+  CardInsertionDate DATE,
+  InsertedBy_emp_id int,
+  CardModificationDate DATE,
+  ModifiedBy_emp_id VARCHAR(100),
+  Amount int,
+  FOREIGN KEY (ClaimID) REFERENCES Claim(ClaimID)
+
+);
+
+
+
+-- Create Recovery Table
+CREATE TABLE Recovery (
+  DisputeID INT PRIMARY KEY,
+  ClaimID INT,
+--   VendorID INT,
+--   Required bool,
+--   Status bool,
+  Remarks VARCHAR(100),
+  FOREIGN KEY (ClaimID) REFERENCES Claim(ClaimID)
+);
+
+
